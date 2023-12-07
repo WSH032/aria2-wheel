@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 # https://hatch.pypa.io/latest/config/metadata/
 [project]
-name = "aria2"
+name = "aria2c"
 requires-python = ">=3.8"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -36,11 +36,16 @@ Documentation = "https://WSH032.github.io/aria2-wheel/"
 "Source code" = "https://github.com/WSH032/aria2-wheel/"
 
 
+# https://hatch.pypa.io/latest/config/metadata/#cli
+[project.scripts]
+aria2c = "aria2c:main"
+
+
 [tool.hatch.version]
 # refer to: https://github.com/frankie567/hatch-regex-commit
 source = "regex_commit"
 commit_extra_args = ["-e"]
-path = "src/aria2/__init__.py"
+path = "src/aria2c/__init__.py"
 # NOTE: `chore` is required by commitlint
 commit_message = "chore(version): 🚀 bump version v{current_version} → v{new_version}"
 tag_message = "🚀 bump version v{current_version} → v{new_version}"
@@ -79,7 +84,7 @@ lint-check = [
     "ruff .",
     "black --check .",
     "pyright .",
-    "pyright --verifytypes aria2 --ignoreexternal",
+    "pyright --verifytypes aria2c --ignoreexternal",
     "codespell .",
 ]
 check-all = ["lint-check", "test"]
@@ -185,7 +190,7 @@ reportMissingParameterType = true
 # https://coverage.readthedocs.io/en/7.3.2/config.html#run
 [tool.coverage.run]
 branch = true
-source = ['aria2']
+source = ['aria2c']
 
 # https://coverage.readthedocs.io/en/7.3.2/config.html#report
 [tool.coverage.report]
