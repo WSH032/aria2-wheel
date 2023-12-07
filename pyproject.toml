@@ -1,0 +1,213 @@
+[build-system]
+requires = ["hatchling >= 1.13.0", "hatch-regex-commit"]
+build-backend = "hatchling.build"
+
+# https://hatch.pypa.io/latest/config/metadata/
+[project]
+name = "aria2"
+requires-python = ">=3.8"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Sean Wang", email = "126865849+WSH032@users.noreply.github.com" },
+]
+description = "python wheel for aria2 static build."
+keywords = ["aria2", "aria2c", "aria2c.exe", "aria2-static"]
+# https://pypi.org/classifiers/
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+dynamic = ["version"]
+
+# NOTE: version constraints
+# https://iscinumpy.dev/post/bound-version-constraints/
+
+dependencies = []
+
+
+[project.urls]
+Documentation = "https://WSH032.github.io/aria2-wheel/"
+"Source code" = "https://github.com/WSH032/aria2-wheel/"
+
+
+[tool.hatch.version]
+# refer to: https://github.com/frankie567/hatch-regex-commit
+source = "regex_commit"
+commit_extra_args = ["-e"]
+path = "src/aria2/__init__.py"
+# NOTE: `chore` is required by commitlint
+commit_message = "chore(version): 🚀 bump version v{current_version} → v{new_version}"
+tag_message = "🚀 bump version v{current_version} → v{new_version}"
+# NOTE: `v` prefix is required by github `publish.yml` action
+tag_name = "v{new_version}"
+check_dirty = false
+
+
+[tool.hatch.envs.default]
+path = ".venv" # for vscode auto selecting python interpreter
+dependencies = [
+    #   NOTE: 👇
+    #   The versions of `black`, `ruff`, `codespell`,  must be consistent with the `.pre-commit-config.yaml`.
+    #   Don't edit them manually, use `pre-commit run ver_sync` instead.
+    "black==23.11.0",
+    "ruff==0.1.6",
+    "codespell==2.2.6",
+    #   Don't write comments on these lines, because they will be removed by `pre-commit run ver_sync`.
+    #   NOTE: 👆
+
+    # lint-check
+    "pyright == 1.1.338", # pyright must be installed in the runtime environment
+    # test
+    "pytest == 7.*",
+    "pytest-cov ==  4.*",
+    "pytest-timeout==2.*",
+]
+
+[tool.hatch.envs.default.scripts]
+# https://pytest-cov.readthedocs.io/en/latest/config.html
+# xml for codecov, html for local review
+test = "pytest tests/ --cov --cov-report=xml --cov-report=html"
+# ruff must before black
+lint = ["- ruff --fix .", "- black .", "- pyright .", "- codespell . -i 3 -w"]
+lint-check = [
+    "ruff .",
+    "black --check .",
+    "pyright .",
+    "pyright --verifytypes aria2 --ignoreexternal",
+    "codespell .",
+]
+check-all = ["lint-check", "test"]
+
+# https://hatch.pypa.io/latest/config/environment/overview/#detached-environments
+[tool.hatch.envs.docs]
+path = ".venv-docs"
+detached = true
+dependencies = [
+    "mkdocs-material == 9.*",
+    "mkdocstrings[python] == 0.24.*",
+    "mkdocs-gen-files == 0.5.*",
+    "mkdocs-literate-nav == 0.6.*",
+    "mkdocs-section-index == 0.3.*",
+    "mkdocs-git-revision-date-localized-plugin == 1.*",
+    "mkdocs-git-committers-plugin-2 == 2.*",
+]
+
+[tool.hatch.envs.docs.scripts]
+docs-serve = "mkdocs serve"
+docs-build = "mkdocs build"
+
+
+# https://docs.astral.sh/ruff/rules/
+[tool.ruff]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "C4",     # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "D",      # pydocstyle
+    "SIM",    # flake8-simplify
+    "RUF",    # unused-noqa
+    "Q",      # flake8-quotes
+    "C90",    # McCabe complexity
+    "ANN001", # missing-type-function-argument
+    "ANN201", # missing-return-type-undocumented-public-function
+    "ASYNC",  # flake8-async
+    "A",      # flake8-builtins
+    "COM",    # flake8-commas
+    "ISC",    # flake8-implicit-str-concat
+    "ICN001", # unconventional-import-alias
+    "PIE",    # flake8-pie
+    "PT",     # flake8-pytest-style
+    "INT",    # flake8-gettext
+    "ARG",    # flake8-unused-arguments
+    "PGH004", # blanket-noqa
+    "TRY201", # Use raise without specifying exception name
+    "NPY",    # NumPy-specific rules
+    "PD",     # pandas-vet
+    "PERF",   # Perflint
+    "PL",     # Pylint
+    "TID252", # Relative imports from parent modules are banned
+]
+ignore = [
+    "E501",    # line too long, handled by black
+    "COM812",  # missing-trailing-comma
+    "PERF203", # try-except within a loop incurs performance overhead
+    "PLR2004", # magic-value-comparison
+    "PLR5501", # collapsible-else-if
+    "PLW0120", # useless-else-on-loop
+    "PLR0911", # too-many-return-statements
+    "PLR0913", # too-many-arguments
+    "PLC0205", # single-string-slots
+    "PLW0603", # global-statement
+    "PLC1901", # compare-to-empty-string
+    "PLR0904", # too-many-public-methods
+    "RUF002",  # ambiguous-unicode-character-docstring
+    "RUF003",  # ambiguous-unicode-character-comment
+    "SIM105",  # suppressible-exception # slower
+    # "D418",    # Function decorated with `@overload` shouldn't contain a docstring
+    # "SIM108",  # if-else-block-instead-of-if-exp
+]
+
+# https://docs.astral.sh/ruff/settings/#pydocstyle
+[tool.ruff.pydocstyle]
+convention = "google"
+
+# [tool.ruff.flake8-tidy-imports]
+# ban-relative-imports = "all"
+
+
+# https://microsoft.github.io/pyright/#/configuration
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.8"
+reportUnusedImport = "warning"
+reportUnusedFunction = "warning"
+reportUnusedExpression = "warning"
+reportUnusedVariable = "warning"
+reportUnnecessaryTypeIgnoreComment = true
+reportPrivateUsage = "warning"
+reportUnnecessaryIsInstance = "warning"
+reportIncompatibleMethodOverride = "warning"
+reportMissingTypeArgument = true
+reportMissingParameterType = true
+
+
+# https://coverage.readthedocs.io/en/7.3.2/config.html#run
+[tool.coverage.run]
+branch = true
+source = ['aria2']
+
+# https://coverage.readthedocs.io/en/7.3.2/config.html#report
+[tool.coverage.report]
+exclude_also = [
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+    # # deprecated code will not be tested
+    "@(typing_extensions\\.)?deprecated",
+    # `overload` just for type hint, will not be tested
+    "@(typing_extensions\\.)?overload",
+    "@(typing\\.)?overload",
+    "raise AssertionError",
+]
+
+
+[tool.codespell]
+# https://github.com/codespell-project/codespell/issues/1887
+skip = "./htmlcov,./site"
+
+
+[tool.pytest.ini_options]
+timeout = 15
