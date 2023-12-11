@@ -1,0 +1,77 @@
+# WARNING: Do not change the name of this file, keep `lint-test.yml`.
+# `workflow_call` needs the name of the workflow file to work.
+
+name: Lint check and test
+
+# We only automatically run checks for PRs.
+# It is best to avoid direct commits to the main branch, instead make a PR for checks.
+# For the pushes to the main branch, the checks is done by `publish.yml` when publish.
+on:
+  pull_request:
+  workflow_dispatch:
+  # NOTE: set `secrets: inherit` when call this workflow from other workflow.
+  workflow_call:
+
+jobs:
+  lint-check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install hatch
+      - name: Lint check and type check
+        run: |
+          hatch run lint-check
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        os: ["ubuntu-latest", "windows-latest"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install hatch
+      - name: Test
+        # Prevent unknown errors from causing long-term blockage of ci during testing
+        # can be adjusted according to the actual test time
+        timeout-minutes: 5
+        run: |
+          hatch run test
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+          fail_ci_if_error: true
+
+  # https://github.com/marketplace/actions/alls-green#why
+  lint-test-all-green: # This job does nothing and is only used for the branch protection
+    if: always() # IMPORTANT: mandatory
+    needs:
+      - lint-check
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
