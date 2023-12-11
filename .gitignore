@@ -151,4 +151,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-src/aria2c/bin/*
+# keep this consistent with `hatch_build.Aria2cHook.clean`
+src/aria2c/bin/

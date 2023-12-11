@@ -18,6 +18,7 @@ __all__ = ("ARIA2C", "main")
 
 
 CWD = Path(__file__).parent.absolute()
+# NOTE: keep the `bin dir` consistent with the one in `hatch_build.py`
 BIN = CWD / "bin"
 ARIA2C = BIN / ("aria2c.exe" if sys.platform == "win32" else "aria2c")
 
