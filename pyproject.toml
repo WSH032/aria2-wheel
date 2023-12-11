@@ -1,6 +1,6 @@
 # https://hatch.pypa.io/latest/config/metadata/
 [project]
-name = "aria2c"
+name = "aria2"
 requires-python = ">=3.8"
 readme = "README.md"
 license = { file = "LICENSE" }
