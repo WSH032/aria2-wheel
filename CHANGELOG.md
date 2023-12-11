@@ -22,4 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [`aria2` 1.37.0](https://github.com/abcfy2/aria2-static-build/releases/tag/1.37.0)
+
 [unreleased]: https://github.com/WSH032/aria2-wheel/tree/HEAD
