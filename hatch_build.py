@@ -148,7 +148,19 @@ class Aria2cHook(BuildHookInterface[BuilderConfig]):
 
                 abs_bin_dir = self.get_bin_dir()
                 abs_bin_dir.mkdir(parents=True, exist_ok=True)
-                zipfile.ZipFile(download_file).extractall(abs_bin_dir)
+
+                opened_zipfile = zipfile.ZipFile(download_file)
+                # Extract all the files, and set permissions to match the original permissions
+                # Ref: https://github.com/python/cpython/pull/32289/
+                #      https://github.com/python/cpython/issues/59999
+                for member in opened_zipfile.infolist():
+                    unzip_file_path = opened_zipfile.extract(member, abs_bin_dir)
+                    # Ignore permissions if the archive was created on Windows
+                    if member.create_system == 0:
+                        continue
+                    mode = (member.external_attr >> 16) & 0xFFFF
+                    os.chmod(unzip_file_path, mode)
+
         except Exception as e:
             raise RuntimeError("Failed to download aria2c artifacts.") from e
 
