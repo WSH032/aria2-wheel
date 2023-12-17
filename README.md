@@ -38,10 +38,35 @@ Now, we support:
 - [x] Linux x86_64
 - [x] Linux aarch64
 
+## Features
+
+`aria2-wheel` internally bundles the aria2c binary and utilizes the [entry_point](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#console-scripts) technology.
+
+Therefore, it does not modify your system's `PATH` environment variable, and there is no need for `sudo` permissions.
+
+You can completely uninstall it by running `pip uninstall aria2`.
+
+## Credits
+
+- [aria2](https://github.com/aria2/aria2)
+    - This project is not `aria2` official project.
+- [aria2-static-build](https://github.com/abcfy2/aria2-static-build)
+    - The bound aria2 executable file directly comes from `aria2-static-build` project, and `aria2-wheel` assumes no responsibility for your use.
+    - The license of `aria2-wheel` project is consistent with `aria2-static-build` project.
+
+check `hatch_build.py` to know how we build the wheel.
+
 ## Install
 
 ```shell
 pip install aria2
+```
+
+or install in global environment with [pipx](https://pypa.github.io/pipx/)
+
+```shell
+# https://pypa.github.io/pipx/
+pipx install aria2
 ```
 
 ## Usage
@@ -119,14 +144,6 @@ with Popen(args=("aria2c", "--enable-rpc"), **popen_kwargs) as p:
 English is not the native language of the author (me), so if you find any areas for improvement in the documentation, your feedback is welcome.
 
 If you think this project helpful, consider giving it a star ![GitHub Repo stars](https://img.shields.io/github/stars/wsh032/aria2-wheel?style=social), which makes me happy. :smile:
-
-## Credits
-
-- [aria2](https://github.com/aria2/aria2)
-    - **NOTE!** This project is **not** aria2 official project.
-- [aria2-static-build](https://github.com/abcfy2/aria2-static-build)
-    - The executable file of aria2 directly comes from this project.
-    - The license of this project is consistent with it, and assumes no responsibility for your use.
 
 <!-- link -->
 
