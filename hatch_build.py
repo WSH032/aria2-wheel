@@ -52,6 +52,7 @@ class Tag4Build(NamedTuple):
     whl_platform: str
 
 
+# keep all of `Tag4Build().aria2_build` consistent with `matrix.cross_host` in `.github\workflows\publish.yml`
 tag_4_build_enum = (
     Tag4Build("x86_64-linux-musl", "linux_x86_64"),
     Tag4Build("aarch64-linux-musl", "linux_aarch64"),
