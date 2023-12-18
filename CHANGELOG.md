@@ -22,8 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.1b0] - 2023-12-18
+
 ### Added
 
 - [`aria2` 1.37.0](https://github.com/abcfy2/aria2-static-build/releases/tag/1.37.0)
 
+<!-- link -->
+
 [unreleased]: https://github.com/WSH032/aria2-wheel/tree/HEAD
+[0.0.1b0]: https://github.com/WSH032/aria2-wheel/releases/tag/v0.0.1b0
