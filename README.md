@@ -150,9 +150,9 @@ If you think this project helpful, consider giving it a star ![GitHub Repo stars
 <!-- link -->
 
 <!-- ci/cd -->
-[CI: lint-test]: https://github.com/WSH032/aria2-wheel/actions/workflows/lint-test.yml/badge.svg?branch=main
+[CI: lint-test]: https://github.com/WSH032/aria2-wheel/actions/workflows/lint-test.yml/badge.svg
 [CI: lint-test#link]: https://github.com/WSH032/aria2-wheel/actions/workflows/lint-test.yml
-[CI: docs]: https://github.com/WSH032/aria2-wheel/actions/workflows/docs.yml/badge.svg?branch=main
+[CI: docs]: https://github.com/WSH032/aria2-wheel/actions/workflows/docs.yml/badge.svg
 [CI: docs#link]: https://github.com/WSH032/aria2-wheel/actions/workflows/docs.yml
 [CI: publish]: https://github.com/WSH032/aria2-wheel/actions/workflows/publish.yml/badge.svg
 [CI: publish#link]: https://github.com/WSH032/aria2-wheel/actions/workflows/publish.yml
@@ -168,10 +168,10 @@ If you think this project helpful, consider giving it a star ![GitHub Repo stars
 [Checked with pyright]: https://microsoft.github.io/pyright/img/pyright_badge.svg
 [Checked with pyright#link]: https://microsoft.github.io/pyright
 <!-- package -->
-[PyPI - Version]: https://img.shields.io/pypi/v/aria2-wheel?logo=pypi&label=PyPI&logoColor=gold
-[PyPI - Downloads]: https://img.shields.io/pypi/dm/aria2-wheel?color=blue&label=Downloads&logo=pypi&logoColor=gold
-[PyPI - Python Version]: https://img.shields.io/pypi/pyversions/aria2-wheel?logo=python&label=Python&logoColor=gold
-[PyPI#link]: https://pypi.org/project/aria2-wheel
+[PyPI - Version]: https://img.shields.io/pypi/v/aria2?logo=pypi&label=PyPI&logoColor=gold
+[PyPI - Downloads]: https://img.shields.io/pypi/dm/aria2?color=blue&label=Downloads&logo=pypi&logoColor=gold
+[PyPI - Python Version]: https://img.shields.io/pypi/pyversions/aria2?logo=python&label=Python&logoColor=gold
+[PyPI#link]: https://pypi.org/project/aria2
 <!-- meta -->
 [Hatch project]: https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg
 [Hatch project#link]: https://github.com/pypa/hatch
