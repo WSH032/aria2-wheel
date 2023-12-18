@@ -30,8 +30,9 @@ RELEASE_URL = f"https://github.com/abcfy2/aria2-static-build/releases/download/{
 """需要使用 `.format(BUILD='x86_64-w64-mingw32')` 来生成最终的URL"""
 
 
-ARIA2_BUILD_ENV_VAR = "CROSS_HOST"
-"""Ref: https://github.com/abcfy2/aria2-static-build#build-locally-yourself"""
+# keep this consistent with name of var `env` in `.github\workflows\publish.yml`
+BUILD_TAG_ENV_VAR_NAME = "WHL_PLATFORM"
+
 
 # keep posix path style
 # NOTE: keep the `bin dir` consistent with the one in `src/aria2c/__init__.py`
@@ -42,20 +43,24 @@ class Tag4Build(NamedTuple):
     """用于描述构建平台的tag.
 
     Attributes:
-        aria2_build: aria2c的构建平台, 如x86_64-linux-musl.
+        aria2_build: aria2c的构建平台, 如x86_64-linux-musl .
             Ref: https://github.com/abcfy2/aria2-static-build
-        whl_platform: 最终生成的whl包的平台, 如linux_x86_64.
+        whl_platform: 最终生成的whl包的平台, 如manylinux_2_17_x86_64 .
             Ref: https://packaging.python.org/en/latest/specifications/platform-compatibility-tags/#platform-tag
+                 https://github.com/deltachat/deltachat-core-rust/pull/4832
+                 https://github.com/pypi/warehouse/blob/92856ad31fd5d28892d9072dd1633a0b31976708/warehouse/forklift/legacy.py#L166-L182
     """
 
     aria2_build: str
     whl_platform: str
 
 
-# keep all of `Tag4Build().aria2_build` consistent with `matrix.cross_host` in `.github\workflows\publish.yml`
+# keep all of `Tag4Build().whl_platform` consistent with `matrix.whl_platform` in `.github\workflows\publish.yml`
 tag_4_build_enum = (
-    Tag4Build("x86_64-linux-musl", "linux_x86_64"),
-    Tag4Build("aarch64-linux-musl", "linux_aarch64"),
+    Tag4Build("x86_64-linux-musl", "manylinux_2_17_x86_64"),
+    Tag4Build("x86_64-linux-musl", "musllinux_1_1_x86_64"),
+    Tag4Build("aarch64-linux-musl", "manylinux_2_17_aarch64"),
+    Tag4Build("aarch64-linux-musl", "musllinux_1_1_aarch64"),
     Tag4Build("x86_64-w64-mingw32", "win_amd64"),
     Tag4Build("i686-w64-mingw32", "win32"),
 )
@@ -63,18 +68,18 @@ tag_4_build_enum = (
 
 def _get_tag_4_build_by_env() -> Union[Tag4Build, None]:
     """从环境变量中获取构建平台的tag."""
-    aria2_build = os.getenv(ARIA2_BUILD_ENV_VAR)
-    if aria2_build is None:
+    build_tag = os.getenv(BUILD_TAG_ENV_VAR_NAME)
+    if build_tag is None:
         return None
 
     for tag in tag_4_build_enum:
-        if tag.aria2_build == aria2_build:
+        if tag.whl_platform == build_tag:
             return tag
     else:
         msg = dedent(
             f"""\
-            Invalid '{ARIA2_BUILD_ENV_VAR}' env var: {aria2_build}
-            Only support: {', '.join(tag.aria2_build for tag in tag_4_build_enum)}
+            Invalid '{BUILD_TAG_ENV_VAR_NAME}' env var: {build_tag}
+            Only support: {', '.join(tag.whl_platform for tag in tag_4_build_enum)}
             """
         )
         raise RuntimeError(msg)
@@ -98,7 +103,7 @@ def get_tag_4_build() -> Tag4Build:
         msg = dedent(
             f"""\
             Can't find tag for build.
-            Please set '{ARIA2_BUILD_ENV_VAR}' env var or run this building on supported platform.
+            Please set '{BUILD_TAG_ENV_VAR_NAME}' env var or run this building on supported platform.
                 supported platform: {', '.join(tag.whl_platform for tag in tag_4_build_enum)}
             """
         )

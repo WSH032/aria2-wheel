@@ -24,14 +24,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # keep `cross_host` consistent with `tag_4_build_enum` in `hatch_build.py`
-        cross_host:
-          - x86_64-linux-musl
-          - aarch64-linux-musl
-          - x86_64-w64-mingw32
-          - i686-w64-mingw32
+        # keep `whl_platform` consistent with `tag_4_build_enum` in `hatch_build.py`
+        whl_platform:
+          - manylinux_2_17_x86_64
+          - musllinux_1_1_x86_64
+          - manylinux_2_17_aarch64
+          - musllinux_1_1_aarch64
+          - win_amd64
+          - win32
     env:
-      CROSS_HOST: ${{ matrix.cross_host }}
+      WHL_PLATFORM: ${{ matrix.whl_platform }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python

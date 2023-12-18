@@ -33,10 +33,12 @@ So I build this python wheel to binding aria2 static build. You can install it b
 
 Now, we support:
 
-- [x] Windows 32bit
-- [x] Windows 64bit
-- [x] Linux x86_64
-- [x] Linux aarch64
+- [x] manylinux_2_17_x86_64
+- [x] musllinux_1_1_x86_64
+- [x] manylinux_2_17_aarch64
+- [x] musllinux_1_1_aarch64
+- [x] win_amd64
+- [x] win32
 
 ## Features
 
@@ -54,7 +56,7 @@ You can completely uninstall it by running `pip uninstall aria2`.
     - The bound aria2 executable file directly comes from `aria2-static-build` project, and `aria2-wheel` assumes no responsibility for your use.
     - The license of `aria2-wheel` project is consistent with `aria2-static-build` project.
 
-check `hatch_build.py` to know how we build the wheel.
+check `hatch_build.py` and `.github/workflows/publish.yml` to know how we build the wheel.
 
 ## Install
 
