@@ -76,12 +76,10 @@ def _get_tag_4_build_by_env() -> Union[Tag4Build, None]:
         if tag.whl_platform == build_tag:
             return tag
     else:
-        msg = dedent(
-            f"""\
+        msg = dedent(f"""\
             Invalid '{BUILD_TAG_ENV_VAR_NAME}' env var: {build_tag}
             Only support: {', '.join(tag.whl_platform for tag in tag_4_build_enum)}
-            """
-        )
+            """)
         raise RuntimeError(msg)
 
 
@@ -100,13 +98,11 @@ def get_tag_4_build() -> Tag4Build:
     """获取构建平台的tag."""
     tag = _get_tag_4_build_by_env() or _get_tag_4_build_by_platform()
     if tag is None:
-        msg = dedent(
-            f"""\
+        msg = dedent(f"""\
             Can't find tag for build.
             Please set '{BUILD_TAG_ENV_VAR_NAME}' env var or run this building on supported platform.
                 supported platform: {', '.join(tag.whl_platform for tag in tag_4_build_enum)}
-            """
-        )
+            """)
         raise RuntimeError(msg)
     return tag
 
